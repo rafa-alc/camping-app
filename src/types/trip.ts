@@ -9,14 +9,14 @@ export type AccommodationType =
   | 'camping_cabin';
 
 export type TaskCategory =
-  | 'essentials'
-  | 'sleep'
-  | 'shelter'
-  | 'cooking'
-  | 'food'
-  | 'clothing'
-  | 'hygiene'
-  | 'safety'
+  | 'shelter_rest'
+  | 'cooking_food'
+  | 'clothing_footwear'
+  | 'energy_lighting_navigation'
+  | 'health_safety_repair'
+  | 'hygiene_cleanup'
+  | 'documents_money'
+  | 'leisure'
   | 'pet'
   | 'comfort_extras';
 
@@ -26,7 +26,23 @@ export type TaskType = 'essential' | 'extra';
 
 export type TaskStatus = 'todo' | 'done' | 'not_needed';
 
+export type TaskSource = 'catalog' | 'custom';
+
 export type CategoryStatus = 'todo' | 'partial' | 'done';
+
+export type TripRewardOrigin = 'new' | 'template' | 'duplicate' | 'legacy';
+
+export type TripInventoryReward = {
+  eligible: boolean;
+  claimed: boolean;
+  claimedAt: string | null;
+  origin: TripRewardOrigin;
+};
+
+export type UserProgress = {
+  totalPoints: number;
+  rewardedTripContextIds: string[];
+};
 
 export type TripContext = {
   id: string;
@@ -39,19 +55,15 @@ export type TripContext = {
 
 export type TripContextInput = Omit<TripContext, 'id' | 'createdAt'>;
 
-export type TaskTemplate = {
-  id: string;
-  title: string;
-  category: TaskCategory;
-  basePriority: TaskPriority;
-  type: TaskType;
-  basePoints: number;
-  description?: string;
+export type TripSetupInput = {
+  tripName: string;
+  context: TripContextInput;
 };
 
 export type TripTask = {
   id: string;
   templateId: string;
+  source: TaskSource;
   title: string;
   category: TaskCategory;
   priority: TaskPriority;
@@ -63,8 +75,21 @@ export type TripTask = {
 
 export type TripState = {
   context: TripContext | null;
+  currentTripName: string | null;
+  inventoryReward: TripInventoryReward | null;
   tasks: TripTask[];
   lastUpdatedAt: string | null;
+  activeSavedTripId?: string | null;
+};
+
+export type SavedTripRecord = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  context: TripContext;
+  inventoryReward: TripInventoryReward;
+  tasks: TripTask[];
 };
 
 export type GroupedTasks = Partial<Record<TaskCategory, TripTask[]>>;
@@ -86,4 +111,9 @@ export type TripProgress = {
   extrasTotal: number;
   extrasRate: number;
   pocketPoints: number;
+};
+
+export type CustomTaskInput = {
+  title: string;
+  destination: TaskCategory;
 };

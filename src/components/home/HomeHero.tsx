@@ -1,47 +1,56 @@
 type HomeHeroProps = {
-  hasSavedTrip: boolean;
+  hasCurrentTrip: boolean;
+  hasSavedTrips: boolean;
+  onOpenSavedTrips: () => void;
   onStartPlanning: () => void;
   onResumeTrip: () => void;
 };
 
 const featureItems = [
-  'Trip-ready checklist shaped by how you are staying and who is coming',
-  'Clear checklist sections that are easier to scan than a dense planning layout',
-  'Optional comfort extras kept separate from the core packing flow',
+  'Una checklist preparada según cómo viajas y quién viene contigo',
+  'Secciones claras, más fáciles de recorrer que una planificación densa',
+  'Extras de confort separados para no ensuciar lo esencial',
 ];
 
 export const HomeHero = ({
-  hasSavedTrip,
+  hasCurrentTrip,
+  hasSavedTrips,
+  onOpenSavedTrips,
   onStartPlanning,
   onResumeTrip,
 }: HomeHeroProps) => (
   <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
     <div className="panel-surface overflow-hidden p-8 sm:p-10">
       <div className="max-w-2xl">
-        <span className="ui-chip-soft">Camping trip planner</span>
+        <span className="ui-chip-soft">Planificador de viajes de camping</span>
         <h2 className="mt-5 text-4xl font-semibold tracking-tight text-pine-700 sm:text-5xl">
-          Prepare a camping trip without second-guessing every item.
+          Planifica y personaliza tu viaje de camping con calma
         </h2>
         <p className="mt-5 max-w-xl text-lg leading-8 text-mist-600">
-          CampIn turns your trip context into a guided checklist with clear progress,
-          calm structure, and room to leave the irrelevant items behind.
+          CampIn convierte el contexto de tu viaje en una checklist guiada, con progreso claro,
+          estructura serena y espacio para apartar lo que no hace falta.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <button
-            className="ui-button-primary"
-            onClick={onStartPlanning}
-            type="button"
-          >
-            Start planning
+          <button className="ui-button-primary" onClick={onStartPlanning} type="button">
+            Empezar
           </button>
-          {hasSavedTrip && (
+          {hasCurrentTrip && (
             <button
               className="ui-button-secondary px-6 py-3 font-semibold"
               onClick={onResumeTrip}
               type="button"
             >
-              Resume current trip
+              Retomar viaje actual
+            </button>
+          )}
+          {hasSavedTrips && (
+            <button
+              className="ui-button-ghost px-4 py-3 font-semibold"
+              onClick={onOpenSavedTrips}
+              type="button"
+            >
+              Viajes guardados
             </button>
           )}
         </div>
@@ -50,13 +59,10 @@ export const HomeHero = ({
 
     <div className="space-y-4">
       <div className="panel-surface p-6">
-        <p className="ui-subtle-heading text-sand-500">Why it feels different</p>
+        <p className="section-title text-sand-500">Por qué se siente diferente</p>
         <ul className="mt-4 space-y-3">
           {featureItems.map((item) => (
-            <li
-              className="rounded-2xl border border-stone-100 bg-stone-50/90 px-4 py-4 text-sm leading-6 text-mist-600"
-              key={item}
-            >
+            <li className="paper-inset-soft px-4 py-4 text-sm leading-6 text-mist-600" key={item}>
               {item}
             </li>
           ))}
@@ -64,10 +70,10 @@ export const HomeHero = ({
       </div>
 
       <div className="panel-surface p-6">
-        <p className="section-title">What this MVP covers</p>
+        <p className="section-title">Qué incluye CampIn</p>
         <p className="mt-3 text-sm leading-6 text-mist-600">
-          Home, setup, trip checklist, comfort extras, recoverable not-needed items, local
-          persistence and a lightweight summary modal.
+          Inicio, preparación del viaje, checklist principal, extras de confort, elementos
+          excluibles y recuperables, viajes guardados y un resumen rápido del viaje.
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { groupTasksByCategory } from '@/logic/tripLogic';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { groupTasksByCategory } from '@/logic/tripLogic';
 import type { TripTask } from '@/types/trip';
 import { CATEGORY_LABELS, CATEGORY_ORDER } from '@/utils/constants';
 
@@ -10,6 +10,7 @@ type NotNeededSectionProps = {
   activeTasks: TripTask[];
   onRestoreTask: (taskId: string) => void;
   onMarkNotNeeded: (taskIds: string[]) => void;
+  onDeleteCustomTask?: (taskId: string) => void;
 };
 
 export const NotNeededSection = ({
@@ -17,6 +18,7 @@ export const NotNeededSection = ({
   activeTasks,
   onRestoreTask,
   onMarkNotNeeded,
+  onDeleteCustomTask,
 }: NotNeededSectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>([]);
@@ -64,10 +66,9 @@ export const NotNeededSection = ({
     <section className="panel-surface p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="section-title">Not needed</h2>
+          <h2 className="section-title">No hace falta</h2>
           <p className="mt-1 section-helper">
-            Keep irrelevant suggestions out of the main flow, while still being able to
-            restore them any time.
+            Aparta sugerencias que no encajan en este viaje y recupéralas cuando quieras.
           </p>
         </div>
         <button
@@ -75,27 +76,25 @@ export const NotNeededSection = ({
           onClick={() => setIsOpen((current) => !current)}
           type="button"
         >
-          {isOpen ? 'Hide section' : 'Manage not needed'}
+          {isOpen ? 'Ocultar' : 'Gestionar'}
         </button>
       </div>
 
       {isOpen && (
         <div className="mt-5 space-y-6">
           <section>
-            <h3 className="ui-subtle-heading">
-              Excluded items
-            </h3>
+            <h3 className="ui-subtle-heading">Elementos excluidos</h3>
 
             <div className="mt-3 space-y-3">
               {excludedTasks.length === 0 && (
-                <div className="rounded-3xl border border-dashed border-stone-200/80 bg-stone-50 p-5 text-sm text-mist-600">
-                  No excluded tasks right now.
+                <div className="paper-inset-soft rounded-3xl border-dashed p-5 text-sm text-mist-600">
+                  No hay elementos excluidos ahora mismo.
                 </div>
               )}
 
               {excludedTasks.map((task) => (
                 <article
-                  className="flex flex-col gap-3 rounded-2xl border border-stone-200/80 bg-[#f8f5ef] px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                  className="paper-inset flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
                   key={task.id}
                 >
                   <div>
@@ -106,17 +105,28 @@ export const NotNeededSection = ({
                         {CATEGORY_LABELS[task.category]}
                       </span>
                       <span className="ui-chip-muted">
-                        {task.type === 'essential' ? 'Essential' : 'Extra'}
+                        {task.type === 'essential' ? 'Esencial' : 'Extra'}
                       </span>
                     </div>
                   </div>
-                  <button
-                    className="ui-button-secondary"
-                    onClick={() => onRestoreTask(task.id)}
-                    type="button"
-                  >
-                    Restore to to-do
-                  </button>
+                  <div className="flex flex-wrap gap-2">
+                    {task.source === 'custom' && onDeleteCustomTask && (
+                      <button
+                        className="ui-button-ghost text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                        onClick={() => onDeleteCustomTask(task.id)}
+                        type="button"
+                      >
+                        Eliminar
+                      </button>
+                    )}
+                    <button
+                      className="ui-button-secondary"
+                      onClick={() => onRestoreTask(task.id)}
+                      type="button"
+                    >
+                      Volver a pendientes
+                    </button>
+                  </div>
                 </article>
               ))}
             </div>
@@ -124,18 +134,16 @@ export const NotNeededSection = ({
 
           <section className="border-t border-stone-200/80 pt-6">
             <div className="flex flex-col gap-2">
-              <h3 className="ui-subtle-heading">
-                Select active tasks to exclude
-              </h3>
+              <h3 className="ui-subtle-heading">Selecciona elementos activos para excluir</h3>
               <p className="section-helper">
-                Choose one or more active tasks to mark as not needed for this trip.
+                Elige uno o varios elementos activos para apartarlos de este viaje.
               </p>
             </div>
 
             <div className="mt-4 space-y-4">
               {visibleActiveCategories.length === 0 && (
-                <div className="rounded-3xl border border-dashed border-stone-200/80 bg-stone-50 p-5 text-sm text-mist-600">
-                  No active tasks are available to exclude right now.
+                <div className="paper-inset-soft rounded-3xl border-dashed p-5 text-sm text-mist-600">
+                  No hay elementos activos para excluir ahora mismo.
                 </div>
               )}
 
@@ -157,8 +165,8 @@ export const NotNeededSection = ({
                         <label
                           className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-3 py-3 transition ${
                             isSelected
-                              ? 'border-pine-300 bg-pine-50/85'
-                              : 'border-stone-200/80 bg-white hover:border-stone-300 hover:bg-stone-50'
+                              ? 'border-pine-300 bg-[linear-gradient(180deg,rgba(234,243,233,0.92)_0%,rgba(244,238,228,0.94)_100%)]'
+                              : 'border-stone-200/80 bg-[linear-gradient(180deg,rgba(252,249,244,0.96)_0%,rgba(246,239,230,0.94)_100%)] hover:border-stone-300 hover:bg-[linear-gradient(180deg,rgba(253,250,246,0.98)_0%,rgba(248,242,233,0.98)_100%)]'
                           }`}
                           key={task.id}
                         >
@@ -189,8 +197,8 @@ export const NotNeededSection = ({
             <div className="mt-4 flex flex-col gap-3 border-t border-stone-200/80 pt-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-mist-600">
                 {selectedTaskIds.length === 0
-                  ? 'Select one or more tasks to exclude.'
-                  : `${selectedTaskIds.length} task${selectedTaskIds.length > 1 ? 's' : ''} selected.`}
+                  ? 'Selecciona uno o más elementos para excluir.'
+                  : `${selectedTaskIds.length} elemento${selectedTaskIds.length > 1 ? 's' : ''} seleccionado${selectedTaskIds.length > 1 ? 's' : ''}.`}
               </p>
               <button
                 className="ui-button-primary disabled:cursor-not-allowed disabled:bg-stone-300"
@@ -198,7 +206,7 @@ export const NotNeededSection = ({
                 onClick={handleApply}
                 type="button"
               >
-                Mark as not needed
+                Excluir seleccionados
               </button>
             </div>
           </section>

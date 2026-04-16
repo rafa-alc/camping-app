@@ -2,18 +2,27 @@ import { useState } from 'react';
 
 import { TaskItem } from '@/components/board/TaskItem';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
-import type { CategoryProgress, TaskStatus, TripTask } from '@/types/trip';
+import type {
+  TaskStatus,
+  TripTask,
+} from '@/types/trip';
 
 type ComfortExtrasSectionProps = {
   tasks: TripTask[];
-  summary?: CategoryProgress;
+  doneCount: number;
+  totalCount: number;
   onStatusChange: (taskId: string, status: TaskStatus) => void;
+  onUpdateCustomTaskTitle: (taskId: string, title: string) => void;
+  onDeleteCustomTask: (taskId: string) => void;
 };
 
 export const ComfortExtrasSection = ({
   tasks,
-  summary,
+  doneCount,
+  totalCount,
   onStatusChange,
+  onUpdateCustomTaskTitle,
+  onDeleteCustomTask,
 }: ComfortExtrasSectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,37 +37,43 @@ export const ComfortExtrasSection = ({
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-base font-semibold tracking-tight text-pine-700 sm:text-lg">
-                Comfort extras
+                Extras de confort
               </h2>
-              <span className="ui-chip-muted">Optional</span>
+              <span className="ui-chip-muted">Opcional</span>
             </div>
             <p className="mt-1 text-sm text-mist-600">
-              {summary ? `${summary.done} of ${summary.total} ready` : 'Optional items for extra comfort'}
+              {totalCount > 0
+                ? `${doneCount} de ${totalCount} listos`
+                : 'Elementos opcionales para viajar con más comodidad'}
             </p>
           </div>
         </div>
 
-        <button
-          className="ui-button-ghost min-w-[5.5rem] justify-center text-center"
-          onClick={() => setIsOpen((current) => !current)}
-          type="button"
-        >
-          {isOpen ? 'Collapse' : 'Expand'}
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            className="ui-button-ghost min-w-[5.5rem] justify-center text-center"
+            onClick={() => setIsOpen((current) => !current)}
+            type="button"
+          >
+            {isOpen ? 'Ocultar' : 'Ver'}
+          </button>
+        </div>
       </div>
 
-      {isOpen && (
-        <div className="border-t border-stone-200/80 bg-[#fcfbf8]">
+      <div className={`ui-collapse ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-70'}`}>
+        <div className="overflow-hidden border-t border-stone-200/80 bg-[rgba(247,242,234,0.78)]">
           {tasks.map((task) => (
             <div className="border-b border-stone-200/70 last:border-b-0" key={task.id}>
               <TaskItem
+                onDeleteCustomTask={onDeleteCustomTask}
                 onStatusChange={onStatusChange}
+                onUpdateCustomTaskTitle={onUpdateCustomTaskTitle}
                 task={task}
               />
             </div>
           ))}
         </div>
-      )}
+      </div>
     </section>
   );
 };

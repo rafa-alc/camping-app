@@ -1,111 +1,354 @@
 # CampIn
 
-CampIn is a camping trip preparation web app for beginner campers who want a calmer, more reliable way to get ready for a trip without forgetting the basics.
+CampIn es una web app de preparación para escapadas de camping, pensada principalmente para personas principiantes, pero útil también para usuarios más habituales.
 
-It turns a few trip details into a guided checklist with clear category grouping, live progress, optional comfort extras, and a recoverable "not needed" flow for irrelevant suggestions.
+La propuesta del producto no se basa solo en ofrecer una checklist, sino en convertir la preparación de un viaje en una experiencia más clara, visual y estructurada. A partir del contexto del usuario, la app genera una checklist personalizada, muestra el progreso de forma comprensible y añade una capa ligera de gamificación para reforzar la sensación de avance sin entorpecer la utilidad principal.
 
-## Who it is for
+---
 
-- Beginner campers who want confidence before leaving
-- Casual campers who prefer a simple checklist over a dense planning tool
-- Solo planners who want a believable MVP product, not a generic to-do list
+## Qué problema resuelve
 
-## What problem it solves
+Preparar una escapada de camping suele implicar:
 
-Camping prep can feel uncertain, especially for less experienced users. CampIn reduces that uncertainty by:
+- olvidar cosas importantes
+- no saber qué es realmente esencial
+- usar listas genéricas poco adaptadas al contexto real del viaje
+- perder tiempo rearmando la misma preparación en cada salida
 
-- generating a checklist from trip context
-- grouping preparation into clear categories
-- separating optional extras from core readiness
-- keeping progress visible while the checklist stays simple to act on
-- allowing irrelevant suggestions to be excluded without deleting them
+CampIn intenta resolver esto con una experiencia más útil y más agradable:
 
-## Current V1.5 scope
+- genera una checklist contextual
+- permite excluir elementos que no aplican (`not needed`)
+- permite añadir elementos personalizados
+- permite guardar viajes, duplicarlos y usarlos como plantilla
+- mantiene una UX clara, visual y orientada a completar el viaje con menos fricción
 
-- Home / landing screen
-- Compact trip setup flow
-- Main trip checklist in a vertical category flow
-- Sticky progress overview on desktop
-- Comfort extras section
-- Unified "Not needed" management and restore flow
-- Summary modal
-- Local persistence with Zustand and `localStorage`
+---
 
-## UX simplification reset
+## Público objetivo
 
-V1.5 includes a deliberate UX simplification reset based on feedback.
+CampIn está pensado sobre todo para:
 
-The product moved away from a denser board-style presentation and toward a more familiar checklist experience. The goal was to reduce cognitive load, improve first-glance clarity, and make the product feel calmer and easier to complete for regular users.
+- personas principiantes que necesitan ayuda para preparar una escapada
+- usuarios que quieren una checklist más clara y usable que una lista genérica
+- campistas que repiten viajes y quieren reutilizar configuraciones
+- usuarios que valoran una UX cuidada sin perder funcionalidad
 
-That shift included:
+---
 
-- a single vertical checklist flow
-- checkbox-first task interaction
-- removal of the old `in_progress` task state
-- a secondary progress sidebar on desktop instead of progress dominating the main flow
-- a more compact trip setup selector
+## Estado actual del proyecto
 
-## Tech stack
+CampIn se encuentra en una versión funcional avanzada de MVP / V2 temprana.
 
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- Zustand
-- `localStorage`
+Actualmente incluye:
 
-## Run locally
+- generación contextual de checklist
+- checklist vertical y simplificada
+- progreso visual
+- `Comfort extras`
+- gestión de `Not needed`
+- custom items por viaje
+- viajes guardados
+- duplicado y uso como plantilla
+- autenticación básica con persistencia cloud
+- fondos contextuales por pantalla
+- microinteracciones y feedback ligero
+- capa de logros y progreso total del usuario
 
-1. Install dependencies:
+---
+
+## Características principales
+
+### 1. Trip setup contextual
+
+La checklist se genera a partir de un contexto inicial que incluye:
+
+- número de personas
+- duración del viaje
+- tipo de estancia
+- si se viaja con mascota
+
+### 2. Checklist simplificada y usable
+
+La app usa una checklist vertical y clara, con una única acción principal por tarea:
+
+- `todo`
+- `done`
+- `not_needed`
+
+No existe estado `in_progress`.
+
+### 3. Progress overview
+
+El progreso del viaje se muestra de forma separada y visible, incluyendo:
+
+- `Trip readiness`
+- `Comfort extras`
+- `Pocket points`
+- `Total points`
+
+### 4. Custom items
+
+El usuario puede añadir elementos personalizados al viaje actual:
+
+- asignados a una categoría del checklist
+- o enviados a `Comfort extras`
+- con persistencia dentro del viaje
+
+### 5. Saved trips
+
+El usuario puede:
+
+- guardar el viaje actual
+- volver a abrirlo
+- duplicarlo
+- usarlo como plantilla
+- renombrarlo
+- eliminarlo
+
+### 6. Auth + cloud persistence
+
+La app funciona en modo híbrido:
+
+- usuario no autenticado → persistencia local
+- usuario autenticado → persistencia en Supabase
+
+### 7. Light gamification
+
+La gamificación es intencionadamente ligera.
+
+- cada viaje puede aportar un máximo de 250 puntos al inventario total si alcanza 250 puntos de viaje
+- esos puntos totales desbloquean logros visuales
+- el objetivo es reforzar la sensación de progreso, no convertir la app en un juego
+
+---
+
+## Filosofía de producto
+
+CampIn busca mantener este equilibrio:
+
+- utilidad real primero
+- interfaz clara y amable
+- progreso visual
+- gamificación ligera
+- continuidad de uso
+- complejidad controlada
+
+La app no pretende ser una red social, ni un simulador, ni una experiencia centrada en juego. Su núcleo sigue siendo ayudar al usuario a preparar mejor una escapada.
+
+---
+
+## Stack técnico
+
+- **React**
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **Zustand**
+- **Supabase** (auth + cloud persistence)
+
+---
+
+## Arquitectura general
+
+### Frontend
+
+La app está construida como una SPA con React + TypeScript.
+
+### Estado
+
+Zustand se usa para:
+
+- estado del viaje actual
+- tareas
+- custom items
+- saved trips
+- naming del viaje
+- progreso y puntos
+- auth state y persistencia híbrida
+
+### Catálogo
+
+El catálogo de checklist está normalizado en 3 niveles:
+
+- `categories`
+- `pools`
+- `items`
+
+La checklist visible se genera a partir de **pools**, no de items individuales, para mantener una UX más limpia.
+
+### Persistencia
+
+- localStorage para usuarios no autenticados
+- Supabase para usuarios autenticados
+
+---
+
+## Estructura funcional del producto
+
+### V1.5
+
+La V1.5 se centró en:
+
+- rescatar y simplificar la UX
+- pasar de un enfoque tipo taskboard a una checklist real
+- eliminar complejidad innecesaria
+- reforzar legibilidad y familiaridad de uso
+
+### V2
+
+La V2 introdujo:
+
+- catálogo normalizado
+- custom items
+- viajes guardados
+- duplicado / plantilla
+- autenticación
+- persistencia cloud
+- logros y puntos totales
+- ambientación visual más cuidada
+
+---
+
+## Decisiones de producto importantes
+
+### Checklist-first
+
+CampIn no usa un tablero complejo. La checklist es el núcleo del producto y debe seguir siendo clara, simple y familiar.
+
+### `Not needed` como ajuste, no como castigo
+
+Los elementos excluidos no deberían sentirse como error, sino como adaptación del viaje.
+
+### Custom items por viaje, no globales
+
+Por ahora, los items personalizados pertenecen al viaje actual. No existe todavía una librería global de custom items del usuario.
+
+### Persistencia híbrida
+
+No se fuerza autenticación:
+
+- local para usuarios anónimos
+- cloud para usuarios autenticados
+
+### Gamificación ligera
+
+Los puntos y logros son una capa secundaria. No deben robar protagonismo a la utilidad principal.
+
+---
+
+## Cómo ejecutar el proyecto en local
+
+### 1. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-2. Start the dev server:
+### 2. Crear variables de entorno
+
+Crea un archivo `.env.local` con algo como:
+
+```
+VITE_SUPABASE_URL=tu_supabase_url
+VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
+```
+
+### 3. Lanzar entorno de desarrollo
 
 ```bash
 npm run dev
 ```
 
-3. Run lint:
-
-```bash
-npm run lint
-```
-
-4. Build for production:
+### 4. Build de producción
 
 ```bash
 npm run build
 ```
 
-## Project structure
+### 5. Lint
 
-```text
-src/
-  app/         App composition and top-level flow
-  catalog/     Mock task catalog
-  components/  UI components by area
-  logic/       Pure derived helpers
-  rules/       Contextual checklist rules
-  store/       Zustand store and persistence
-  types/       Domain model types
-  utils/       Labels, formatting, ids, UI helpers
+```bash
+npm run lint
 ```
 
-## Intentionally out of scope
+## Requisitos para Supabase
 
-- Backend or auth
-- Public profiles or social features
-- AI features
-- Maps, weather, or external integrations
-- Manual task editing
-- Advanced scoring systems
-- Multi-user collaboration
+Para la parte autenticada y cloud, el proyecto necesita:
 
-## Future direction
+- Auth activado con email/password
+- tabla de trips
+- tabla de progreso de usuario si aplica a la versión actual
+- migraciones SQL correctamente aplicadas
+- policies / RLS configuradas según la implementación vigente
 
-Short-term iteration can continue improving polish, accessibility, and catalog quality while keeping the current checklist-first foundation intact.
+## Logros y total points
 
-Longer-term versions can explore richer trip context, smarter generation, and more contextual visual direction once the MVP interaction model is stable.
+CampIn incluye una capa muy ligera de progreso acumulado.
+
+### Regla principal
+
+Cada viaje puede aportar exactamente 250 puntos al total del usuario si alcanza 250 o más puntos de viaje, y solo una vez por viaje.
+
+### Cap
+
+- máximo interno: 10000
+- visualización máxima: `9999+`
+
+### Logros
+
+Los logros se desbloquean por umbrales de Total points.
+
+## Qué queda fuera por ahora
+
+Todavía no forman parte del producto:
+
+- comunidad
+- compartir viajes públicamente
+- perfiles públicos completos
+- IA como eje central de la app
+- sincronización avanzada entre dispositivos
+- settings complejos de cuenta
+- economía o uso activo de puntos
+
+## Roadmap corto
+
+Próximos pasos razonables del producto:
+
+- fase final de QA
+- pulido visual y consistencia final
+- revisión de edge cases y errores de persistencia
+- mejora del branding y shapes si se decide una fase visual más fuerte
+- posible futura ampliación de continuidad o personalización avanzada
+
+## Enfoque de diseño
+
+La UX de CampIn se ha construido con estas prioridades:
+
+- reducir saturación visual
+- evitar interfaces tipo dashboard innecesariamente complejas
+- usar fondos como atmósfera, no como ruido
+- mantener la checklist como protagonista
+- dar feedback de progreso sin convertir la app en un juego
+
+## Autoría y contexto
+
+CampIn está siendo desarrollado como un proyecto de producto web con foco en:
+
+- claridad de UX
+- utilidad real
+- progresión iterativa
+- equilibrio entre funcionalidad y sensación de producto
+
+## Resumen
+
+CampIn es una app de preparación para camping con una dirección clara:
+
+- checklist contextual
+- UX simplificada
+- progreso visible
+- personalización suficiente
+- continuidad de uso
+- una gamificación ligera y contenida
+
+No quiere sustituir la experiencia del viaje. Quiere hacer que prepararlo sea mucho más fácil, agradable y fiable.

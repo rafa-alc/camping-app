@@ -1,7 +1,7 @@
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { CategoryProgress, TripProgress } from '@/types/trip';
 import { CATEGORY_LABELS } from '@/utils/constants';
-import { formatRate } from '@/utils/format';
+import { formatPocketPoints, formatRate } from '@/utils/format';
 
 type SummaryModalProps = {
   isOpen: boolean;
@@ -28,69 +28,69 @@ export const SummaryModal = ({
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-pine-700/35 px-4 py-6 backdrop-blur-sm">
-      <div className="panel-surface max-h-[90vh] w-full max-w-3xl overflow-y-auto p-6 sm:p-8">
+    <div className="ui-dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-pine-700/35 px-4 py-6 backdrop-blur-sm">
+      <div className="panel-surface ui-dialog-panel max-h-[90vh] w-full max-w-3xl overflow-y-auto p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <span className="ui-chip-soft">Trip summary</span>
+            <span className="ui-chip-soft">Resumen del viaje</span>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-pine-700">
-              A quick readiness snapshot
+              Estado rápido del viaje
             </h2>
             <p className="mt-2 section-helper">
-              A compact view of what is already ready, what is still pending, and how the
-              checklist is progressing overall.
+              Una vista compacta de lo que ya está listo, lo que sigue pendiente y cómo
+              avanza el viaje en conjunto.
             </p>
           </div>
           <button
-            aria-label="Close summary"
+            aria-label="Cerrar resumen"
             className="ui-button-secondary"
             onClick={onClose}
             type="button"
           >
-            Close
+            Cerrar
           </button>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="rounded-3xl bg-stone-50 p-5">
-            <p className="ui-subtle-heading">Trip readiness</p>
+          <div className="paper-inset rounded-3xl p-5">
+            <p className="ui-subtle-heading">Preparación del viaje</p>
             <div className="mt-3 text-3xl font-semibold text-pine-700">
               {formatRate(progress.readinessRate)}
             </div>
             <p className="mt-2 text-sm text-mist-600">
-              {progress.readinessCompleted}/{progress.readinessTotal} core tasks done
+              {progress.readinessCompleted}/{progress.readinessTotal} tareas clave completadas
             </p>
           </div>
-          <div className="rounded-3xl bg-stone-50 p-5">
-            <p className="ui-subtle-heading">Comfort extras</p>
+          <div className="paper-inset rounded-3xl p-5">
+            <p className="ui-subtle-heading">Extras de confort</p>
             <div className="mt-3 text-3xl font-semibold text-pine-700">
               {formatRate(progress.extrasRate)}
             </div>
             <p className="mt-2 text-sm text-mist-600">
-              {progress.extrasCompleted}/{progress.extrasTotal} extras done
+              {progress.extrasCompleted}/{progress.extrasTotal} extras completados
             </p>
           </div>
-          <div className="rounded-3xl bg-stone-50 p-5">
-            <p className="ui-subtle-heading">Pocket points</p>
+          <div className="paper-inset rounded-3xl p-5">
+            <p className="ui-subtle-heading">Puntos del viaje</p>
             <div className="mt-3 text-3xl font-semibold text-pine-700">
-              {progress.pocketPoints}
+              {formatPocketPoints(progress.pocketPoints)}
             </div>
             <p className="mt-2 text-sm text-mist-600">
-              Points respond instantly to the tasks that are done right now.
+              Los puntos cambian al instante según lo que ya has completado.
             </p>
           </div>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <section className="rounded-3xl bg-pine-50/60 p-5">
-            <h3 className="text-lg font-semibold text-pine-700">Categories completed</h3>
+          <section className="paper-inset paper-tint rounded-3xl p-5">
+            <h3 className="text-lg font-semibold text-pine-700">Categorías completadas</h3>
             <div className="mt-4 space-y-2">
               {completedCategories.length === 0 && (
-                <p className="text-sm text-mist-600">No categories completed yet.</p>
+                <p className="text-sm text-mist-600">Todavía no hay categorías completadas.</p>
               )}
               {completedCategories.map((category) => (
                 <div
-                  className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 text-sm text-pine-700"
+                  className="paper-inset-soft flex items-center gap-3 px-4 py-3 text-sm text-pine-700"
                   key={category.category}
                 >
                   <div className="ui-icon-badge h-8 w-8 rounded-xl">
@@ -102,22 +102,22 @@ export const SummaryModal = ({
             </div>
           </section>
 
-          <section className="rounded-3xl bg-stone-50 p-5">
-            <h3 className="text-lg font-semibold text-pine-700">Still to finish</h3>
+          <section className="paper-inset rounded-3xl p-5">
+            <h3 className="text-lg font-semibold text-pine-700">Pendiente</h3>
             <div className="mt-4 space-y-2">
               {remainingCategories.length === 0 && (
-                <p className="text-sm text-mist-600">Everything active is complete.</p>
+                <p className="text-sm text-mist-600">Todo lo activo está completado.</p>
               )}
               {remainingCategories.map((category) => (
                 <div
-                  className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 text-sm text-mist-600"
+                  className="paper-inset-soft flex items-center gap-3 px-4 py-3 text-sm text-mist-600"
                   key={category.category}
                 >
                   <div className="ui-icon-badge h-8 w-8 rounded-xl">
                     <CategoryIcon category={category.category} className="h-4 w-4" />
                   </div>
                   <span>
-                    {CATEGORY_LABELS[category.category]} / {category.done}/{category.total} done
+                    {CATEGORY_LABELS[category.category]} / {category.done}/{category.total} completado
                   </span>
                 </div>
               ))}

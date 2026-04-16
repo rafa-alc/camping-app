@@ -5,9 +5,9 @@
 :root {
   color: #18392f;
   background:
-    radial-gradient(circle at top left, rgba(170, 186, 176, 0.2), transparent 28%),
-    radial-gradient(circle at top right, rgba(190, 178, 166, 0.2), transparent 24%),
-    linear-gradient(180deg, #6a6159 0%, #5a524b 100%);
+    radial-gradient(circle at top left, rgba(170, 186, 176, 0.14), transparent 28%),
+    radial-gradient(circle at top right, rgba(190, 178, 166, 0.14), transparent 24%),
+    linear-gradient(180deg, #d8d0c7 0%, #c8beb3 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,9 +19,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(170, 186, 176, 0.16), transparent 28%),
-    radial-gradient(circle at top right, rgba(190, 178, 166, 0.16), transparent 24%),
-    linear-gradient(180deg, #6a6159 0%, #5a524b 100%);
+    radial-gradient(circle at top left, rgba(170, 186, 176, 0.12), transparent 28%),
+    radial-gradient(circle at top right, rgba(190, 178, 166, 0.12), transparent 24%),
+    linear-gradient(180deg, #d8d0c7 0%, #c8beb3 100%);
 }
 
 button,
@@ -41,13 +41,101 @@ textarea {
   }
 
   body {
-    @apply text-pine-700;
+    @apply font-sans text-pine-700;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+@keyframes ui-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ui-float-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+
+  18% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
   }
 }
 
 @layer utilities {
   .panel-surface {
-    @apply rounded-3xl border border-stone-200/80 bg-[rgba(251,248,242,0.98)] shadow-soft backdrop-blur;
+    @apply rounded-3xl border backdrop-blur;
+    border-color: rgba(214, 203, 187, 0.88);
+    background:
+      radial-gradient(circle at top left, rgba(255, 252, 246, 0.88), transparent 34%),
+      linear-gradient(180deg, rgba(252, 248, 241, 0.98) 0%, rgba(246, 240, 231, 0.985) 100%);
+    box-shadow:
+      0 22px 44px -30px rgba(78, 61, 45, 0.28),
+      0 8px 18px -16px rgba(103, 84, 63, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  }
+
+  .paper-inset {
+    @apply rounded-2xl border;
+    border-color: rgba(219, 207, 190, 0.84);
+    background:
+      linear-gradient(180deg, rgba(248, 243, 235, 0.95) 0%, rgba(243, 236, 226, 0.98) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      0 8px 20px -20px rgba(84, 65, 48, 0.28);
+  }
+
+  .paper-inset-soft {
+    @apply rounded-2xl border;
+    border-color: rgba(222, 211, 196, 0.76);
+    background:
+      linear-gradient(180deg, rgba(250, 246, 240, 0.84) 0%, rgba(245, 239, 229, 0.9) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.44);
+  }
+
+  .paper-tint {
+    background:
+      linear-gradient(180deg, rgba(238, 244, 236, 0.7) 0%, rgba(244, 239, 229, 0.9) 100%);
   }
 
   .section-title {
@@ -55,7 +143,7 @@ textarea {
   }
 
   .section-helper {
-    @apply text-sm leading-6 text-mist-600;
+    @apply text-sm leading-6 text-[#6f655a];
   }
 
   .ui-chip {
@@ -63,38 +151,175 @@ textarea {
   }
 
   .ui-chip-muted {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-stone-200/80 bg-stone-50 px-2.5 py-1 text-xs font-medium text-mist-600;
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium;
+    border-color: rgba(214, 203, 187, 0.84);
+    background:
+      linear-gradient(180deg, rgba(248, 243, 236, 0.96) 0%, rgba(242, 235, 225, 0.96) 100%);
+    color: #6e655b;
   }
 
   .ui-chip-soft {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-pine-200/80 bg-pine-50/70 px-2.5 py-1 text-xs font-medium text-pine-700;
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium text-pine-700;
+    border-color: rgba(175, 196, 177, 0.78);
+    background:
+      linear-gradient(180deg, rgba(235, 244, 236, 0.88) 0%, rgba(243, 238, 228, 0.95) 100%);
   }
 
   .ui-button-primary {
-    @apply rounded-full bg-[#2f6655] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_22px_-16px_rgba(47,102,85,0.9)] transition hover:bg-pine-600;
+    @apply rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out;
+    background:
+      linear-gradient(180deg, rgba(60, 112, 95, 1) 0%, rgba(42, 92, 76, 1) 100%);
+    box-shadow:
+      0 12px 24px -18px rgba(42, 92, 76, 0.82),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .ui-button-primary:hover {
+    transform: translateY(-1px);
+    background:
+      linear-gradient(180deg, rgba(68, 121, 103, 1) 0%, rgba(47, 102, 85, 1) 100%);
   }
 
   .ui-button-secondary {
-    @apply rounded-full border border-stone-200/90 bg-stone-50 px-4 py-2 text-sm font-medium text-pine-700 transition hover:border-stone-300 hover:bg-white;
+    @apply rounded-full border px-4 py-2 text-sm font-medium text-pine-700 transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out;
+    border-color: rgba(214, 203, 187, 0.88);
+    background:
+      linear-gradient(180deg, rgba(249, 245, 238, 0.98) 0%, rgba(243, 236, 227, 0.98) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      0 6px 16px -18px rgba(94, 73, 53, 0.45);
+  }
+
+  .ui-button-secondary:hover {
+    transform: translateY(-1px);
+    border-color: rgba(203, 190, 172, 0.95);
+    background:
+      linear-gradient(180deg, rgba(252, 248, 242, 1) 0%, rgba(246, 239, 230, 1) 100%);
   }
 
   .ui-button-ghost {
-    @apply rounded-full border border-transparent bg-transparent px-3 py-2 text-sm font-medium text-mist-500 transition hover:bg-stone-100/70 hover:text-pine-700;
+    @apply rounded-full border border-transparent bg-transparent px-3 py-2 text-sm font-medium text-mist-500 transition-[transform,background-color,color] duration-200 ease-out;
+  }
+
+  .ui-button-ghost:hover {
+    transform: translateY(-1px);
+    background: rgba(244, 237, 228, 0.72);
+    color: #18392f;
   }
 
   .ui-button-danger {
-    @apply rounded-full border border-rose-300 bg-white px-5 py-2.5 text-sm font-semibold text-rose-700 transition hover:border-rose-400 hover:bg-rose-100;
+    @apply rounded-full border px-5 py-2.5 text-sm font-semibold text-rose-700 transition-[transform,background-color,border-color,color] duration-200 ease-out;
+    border-color: rgba(230, 184, 184, 0.95);
+    background:
+      linear-gradient(180deg, rgba(255, 248, 247, 0.98) 0%, rgba(252, 240, 238, 0.98) 100%);
+  }
+
+  .ui-button-danger:hover {
+    transform: translateY(-1px);
+    border-color: rgba(221, 154, 154, 1);
+    background:
+      linear-gradient(180deg, rgba(255, 244, 242, 1) 0%, rgba(251, 231, 228, 1) 100%);
+  }
+
+  .ui-input {
+    @apply w-full rounded-2xl border px-3.5 py-2.5 text-sm text-pine-700 outline-none transition placeholder:text-mist-400;
+    border-color: rgba(214, 203, 187, 0.92);
+    background:
+      linear-gradient(180deg, rgba(253, 250, 245, 0.98) 0%, rgba(247, 241, 233, 0.98) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.58),
+      0 5px 14px -16px rgba(92, 70, 50, 0.45);
+  }
+
+  .ui-input:focus {
+    border-color: rgba(157, 185, 167, 0.95);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.58),
+      0 0 0 3px rgba(198, 219, 205, 0.58),
+      0 5px 14px -16px rgba(92, 70, 50, 0.45);
   }
 
   .ui-icon-badge {
-    @apply inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200/90 bg-stone-100 text-pine-700;
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-2xl border text-pine-700;
+    border-color: rgba(214, 203, 187, 0.88);
+    background:
+      linear-gradient(180deg, rgba(247, 242, 235, 0.98) 0%, rgba(241, 234, 224, 0.98) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
   }
 
   .ui-subtle-heading {
-    @apply text-sm font-semibold uppercase tracking-[0.18em] text-mist-500;
+    @apply text-sm font-semibold tracking-[0.08em] text-[#8a7b6d];
   }
 
   .ui-checkbox {
-    @apply h-5 w-5 cursor-pointer rounded-md border-stone-300 bg-white text-pine-600 shadow-sm transition focus:ring-2 focus:ring-pine-400 focus:ring-offset-0;
+    @apply h-5 w-5 cursor-pointer rounded-md text-pine-600 transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out focus:ring-2 focus:ring-offset-0;
+    border-color: rgba(190, 176, 158, 0.92);
+    background: rgba(252, 248, 242, 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 4px 10px -10px rgba(89, 68, 50, 0.45);
+  }
+
+  .ui-checkbox:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.62),
+      0 8px 16px -12px rgba(89, 68, 50, 0.4);
+  }
+
+  .ui-checkbox:active {
+    transform: scale(0.96);
+  }
+
+  .ui-checkbox:checked {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.42),
+      0 10px 18px -14px rgba(47, 102, 85, 0.45);
+  }
+
+  .ui-checkbox:focus {
+    --tw-ring-color: rgba(157, 185, 167, 0.72);
+  }
+
+  .ui-text-button {
+    @apply text-xs font-medium text-mist-500 transition hover:text-pine-700;
+  }
+
+  .ui-dialog-backdrop {
+    animation: ui-fade-in 180ms ease-out;
+  }
+
+  .ui-dialog-panel {
+    animation: ui-rise-in 220ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .ui-collapse {
+    @apply grid overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out;
+  }
+
+  .ui-progress-fill {
+    @apply transition-[width,background,box-shadow] duration-500 ease-out;
+  }
+
+  .ui-points-feedback {
+    @apply pointer-events-none inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold shadow-sm;
+    animation: ui-float-fade 900ms ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-dialog-backdrop,
+  .ui-dialog-panel,
+  .ui-collapse,
+  .ui-progress-fill,
+  .ui-points-feedback,
+  .ui-button-primary,
+  .ui-button-secondary,
+  .ui-button-ghost,
+  .ui-button-danger,
+  .ui-checkbox {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
   }
 }

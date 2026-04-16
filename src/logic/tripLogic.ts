@@ -1,76 +1,25 @@
-import { taskCatalog } from '@/catalog/taskCatalog';
-import {
-  accommodationBaseTaskIds,
-  durationPriorityBoosts,
-  durationTaskAdditions,
-  groupQuantityReviewIds,
-  optionalCategoryTaskIds,
-  raisePriority,
-} from '@/rules/generationRules';
+import { buildCatalogChecklist } from '@/logic/catalog/buildCatalogChecklist';
 import type {
   CategoryProgress,
   GroupedTasks,
   TaskCategory,
-  TaskTemplate,
   TripContext,
   TripProgress,
   TripTask,
 } from '@/types/trip';
 import { CATEGORY_ORDER } from '@/utils/constants';
+import { POCKET_POINTS_MAX } from '@/utils/limits';
 
 const activeTasksOnly = (tasks: TripTask[]) =>
   tasks.filter((task) => task.status !== 'not_needed');
 
 export const generateTripTasks = (
   context: TripContext,
-  templates: TaskTemplate[] = taskCatalog,
 ): TripTask[] => {
-  const selectedTemplateIds = new Set(accommodationBaseTaskIds[context.accommodationType]);
-
-  durationTaskAdditions[context.tripDuration].forEach((templateId) =>
-    selectedTemplateIds.add(templateId),
-  );
-
-  if (context.hasPet) {
-    optionalCategoryTaskIds.pet.forEach((templateId) =>
-      selectedTemplateIds.add(templateId),
-    );
-  }
-
-  return templates
-    .filter((template) => selectedTemplateIds.has(template.id))
-    .map((template) => {
-      const shouldRaisePriority = durationPriorityBoosts[context.tripDuration].includes(
-        template.id,
-      );
-      const priority = shouldRaisePriority
-        ? raisePriority(template.basePriority)
-        : template.basePriority;
-
-      const groupHint =
-        context.peopleCount === '4_plus' &&
-        groupQuantityReviewIds.includes(
-          template.id as (typeof groupQuantityReviewIds)[number],
-        )
-          ? 'Review quantity for the group.'
-          : undefined;
-
-      const description = [template.description, groupHint]
-        .filter(Boolean)
-        .join(' ');
-
-      return {
-        id: `${context.id}-${template.id}`,
-        templateId: template.id,
-        title: template.title,
-        category: template.category,
-        priority,
-        type: template.type,
-        status: 'todo',
-        points: template.basePoints,
-        description: description || undefined,
-      } satisfies TripTask;
-    });
+  return buildCatalogChecklist(context).map((task) => ({
+    ...task,
+    id: `${context.id}-${task.templateId}`,
+  }));
 };
 
 export const groupTasksByCategory = (tasks: TripTask[]): GroupedTasks =>
@@ -143,7 +92,10 @@ export const getTripProgress = (tasks: TripTask[]): TripProgress => {
     extrasTotal: extraTasks.length,
     extrasRate:
       extraTasks.length === 0 ? 0 : (extrasCompleted / extraTasks.length) * 100,
-    pocketPoints: tasks.reduce((total, task) => total + getTaskPoints(task), 0),
+    pocketPoints: Math.min(
+      tasks.reduce((total, task) => total + getTaskPoints(task), 0),
+      POCKET_POINTS_MAX,
+    ),
   };
 };
 

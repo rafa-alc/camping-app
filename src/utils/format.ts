@@ -1,32 +1,42 @@
 import type {
   AccommodationType,
   PeopleCount,
+  SavedTripRecord,
   TripContext,
   TripDuration,
 } from '@/types/trip';
+import {
+  POCKET_POINTS_DISPLAY_CAP,
+  POCKET_POINTS_MAX,
+  TOTAL_POINTS_DISPLAY_CAP,
+  TOTAL_POINTS_MAX,
+} from '@/utils/limits';
 
 const peopleLabels: Record<PeopleCount, string> = {
   '1': 'Solo',
-  '2': '2 people',
-  '3': '3 people',
-  '4_plus': '4+ people',
+  '2': '2 personas',
+  '3': '3 personas',
+  '4_plus': '4+ personas',
 };
 
 const durationLabels: Record<TripDuration, string> = {
-  short: 'Short stay',
-  medium: 'Medium stay',
-  long: 'Long stay',
+  short: 'Corta',
+  medium: 'Media',
+  long: 'Larga',
 };
 
 const accommodationLabels: Record<AccommodationType, string> = {
-  tent: 'Tent',
-  caravan: 'Caravan',
-  bungalow: 'Bungalow',
-  camping_cabin: 'Camping cabin',
+  tent: 'Tienda',
+  caravan: 'Caravana',
+  bungalow: 'Bungaló',
+  camping_cabin: 'Cabaña',
 };
 
 export const formatTripContext = (context: TripContext): string =>
   `${peopleLabels[context.peopleCount]} / ${durationLabels[context.tripDuration]} / ${accommodationLabels[context.accommodationType]}`;
+
+export const buildSavedTripName = (context: TripContext): string =>
+  `${accommodationLabels[context.accommodationType]} / ${durationLabels[context.tripDuration]} / ${peopleLabels[context.peopleCount]}`;
 
 export const formatFlagSummary = (context: TripContext): string[] => {
   const flags = [
@@ -36,13 +46,35 @@ export const formatFlagSummary = (context: TripContext): string[] => {
   ];
 
   if (context.hasPet) {
-    flags.push('Pet included');
+    flags.push('Con mascota');
   }
 
   return flags;
 };
 
 export const formatRate = (rate: number): string => `${Math.round(rate)}%`;
+
+export const formatSavedTripTimestamp = (value: string): string => {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat('es-ES', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date);
+};
+
+export const formatPocketPoints = (value: number): string =>
+  value >= POCKET_POINTS_MAX ? `${POCKET_POINTS_DISPLAY_CAP}+` : `${Math.round(value)}`;
+
+export const formatTotalPoints = (value: number): string =>
+  value >= TOTAL_POINTS_MAX ? `${TOTAL_POINTS_DISPLAY_CAP}+` : `${Math.round(value)}`;
+
+export const getSavedTripMetaLine = (trip: SavedTripRecord): string =>
+  `${formatTripContext(trip.context)} / Actualizado ${formatSavedTripTimestamp(trip.updatedAt)}`;
 
 export const getProgressFillStyle = (
   rate: number,

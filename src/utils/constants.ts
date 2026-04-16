@@ -1,42 +1,38 @@
+import { catalogCategories } from '@/catalog';
 import type { AccommodationType, PeopleCount, TaskCategory, TripDuration } from '@/types/trip';
 
 export const CATEGORY_ORDER: TaskCategory[] = [
-  'essentials',
-  'sleep',
-  'shelter',
-  'cooking',
-  'food',
-  'clothing',
-  'hygiene',
-  'safety',
-  'pet',
+  ...(catalogCategories.map((category) => category.id) as Exclude<
+    TaskCategory,
+    'comfort_extras'
+  >[]),
   'comfort_extras',
 ];
 
 export const CATEGORY_LABELS: Record<TaskCategory, string> = {
-  essentials: 'Trip basics',
-  sleep: 'Sleep setup',
-  shelter: 'Shelter',
-  cooking: 'Cooking',
-  food: 'Food',
-  clothing: 'Clothing',
-  hygiene: 'Hygiene',
-  safety: 'Safety',
-  pet: 'Pet care',
-  comfort_extras: 'Comfort extras',
+  ...(Object.fromEntries(
+    catalogCategories.map((category) => [category.id, category.label]),
+  ) as Record<Exclude<TaskCategory, 'comfort_extras'>, string>),
+  comfort_extras: 'Extras de confort',
 };
 
+export const CUSTOM_TASK_DESTINATIONS: TaskCategory[] = [
+  ...CATEGORY_ORDER,
+];
+
+export const CUSTOM_TASK_DESTINATION_LABELS = CATEGORY_LABELS;
+
 export const PEOPLE_OPTIONS: Array<{ value: PeopleCount; label: string; helper: string }> = [
-  { value: '1', label: 'Solo', helper: 'A lighter checklist focused on personal basics.' },
-  { value: '2', label: '2 people', helper: 'Balanced planning for a shared trip.' },
-  { value: '3', label: '3 people', helper: 'A bit more food, clothing and coordination.' },
-  { value: '4_plus', label: '4+ people', helper: 'Highlights items that usually need more quantity.' },
+  { value: '1', label: 'Solo', helper: 'Una checklist más ligera, centrada en lo esencial.' },
+  { value: '2', label: '2 personas', helper: 'Planificación equilibrada para un viaje compartido.' },
+  { value: '3', label: '3 personas', helper: 'Algo más de comida, ropa y coordinación.' },
+  { value: '4_plus', label: '4+ personas', helper: 'Destaca lo que suele requerir más cantidad.' },
 ];
 
 export const DURATION_OPTIONS: Array<{ value: TripDuration; label: string; helper: string }> = [
-  { value: 'short', label: 'Short', helper: 'Quick getaway with the essentials.' },
-  { value: 'medium', label: 'Medium', helper: 'Adds supplies for a steadier stay.' },
-  { value: 'long', label: 'Long', helper: 'Prioritizes comfort and repeat-use items.' },
+  { value: 'short', label: 'Corta', helper: 'Una escapada rápida con lo imprescindible.' },
+  { value: 'medium', label: 'Media', helper: 'Añade suministros para una estancia más estable.' },
+  { value: 'long', label: 'Larga', helper: 'Da más peso al confort y a los elementos de uso repetido.' },
 ];
 
 export const ACCOMMODATION_OPTIONS: Array<{
@@ -44,8 +40,8 @@ export const ACCOMMODATION_OPTIONS: Array<{
   label: string;
   helper: string;
 }> = [
-  { value: 'tent', label: 'Tent', helper: 'Full shelter and sleep preparation.' },
-  { value: 'caravan', label: 'Caravan', helper: 'No shelter setup, but still self-sufficient.' },
-  { value: 'bungalow', label: 'Bungalow', helper: 'Lighter sleep and cooking needs.' },
-  { value: 'camping_cabin', label: 'Camping cabin', helper: 'Focus on personal essentials and comfort.' },
+  { value: 'tent', label: 'Tienda', helper: 'Preparación completa de refugio y descanso.' },
+  { value: 'caravan', label: 'Caravana', helper: 'Sin montaje de refugio, pero con autonomía propia.' },
+  { value: 'bungalow', label: 'Bungaló', helper: 'Menos carga en descanso y cocina.' },
+  { value: 'camping_cabin', label: 'Cabaña', helper: 'Más foco en lo personal y en el confort.' },
 ];
