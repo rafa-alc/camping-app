@@ -5,6 +5,10 @@
       "destination": "/"
     },
     {
+      "source": "/campin/",
+      "destination": "/"
+    },
+    {
       "source": "/campin/:path*",
       "destination": "/:path*"
     }
