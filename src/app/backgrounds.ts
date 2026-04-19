@@ -12,9 +12,12 @@ type BackgroundConfig = {
   vignette?: string;
 };
 
+const resolveBackgroundUrl = (path: string) =>
+  `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+
 export const appBackgrounds: Record<AppBackgroundId, BackgroundConfig> = {
   'camping-trip-planning': {
-    imageUrl: '/backgrounds/camping-trip-planning.png',
+    imageUrl: resolveBackgroundUrl('backgrounds/camping-trip-planning.png'),
     position: 'center center',
     overlay:
       'linear-gradient(180deg, rgba(238,233,226,0.52) 0%, rgba(227,220,211,0.6) 40%, rgba(208,198,188,0.7) 100%)',
@@ -24,7 +27,7 @@ export const appBackgrounds: Record<AppBackgroundId, BackgroundConfig> = {
       'radial-gradient(circle at center, rgba(255,255,255,0) 48%, rgba(66,55,43,0.09) 100%)',
   },
   'trip-setup': {
-    imageUrl: '/backgrounds/trip-setup.png',
+    imageUrl: resolveBackgroundUrl('backgrounds/trip-setup.png'),
     position: 'center center',
     overlay:
       'linear-gradient(180deg, rgba(240,235,228,0.54) 0%, rgba(228,221,212,0.62) 42%, rgba(210,200,190,0.72) 100%)',
@@ -34,7 +37,7 @@ export const appBackgrounds: Record<AppBackgroundId, BackgroundConfig> = {
       'radial-gradient(circle at center, rgba(255,255,255,0) 46%, rgba(59,50,40,0.08) 100%)',
   },
   'current-trip': {
-    imageUrl: '/backgrounds/current-trip.png',
+    imageUrl: resolveBackgroundUrl('backgrounds/current-trip.png'),
     position: 'center center',
     overlay:
       'linear-gradient(180deg, rgba(238,234,227,0.6) 0%, rgba(227,220,211,0.69) 42%, rgba(207,197,187,0.8) 100%)',
@@ -44,7 +47,7 @@ export const appBackgrounds: Record<AppBackgroundId, BackgroundConfig> = {
       'radial-gradient(circle at center, rgba(255,255,255,0) 44%, rgba(55,47,38,0.12) 100%)',
   },
   'saved-trips': {
-    imageUrl: '/backgrounds/saved-trips.png',
+    imageUrl: resolveBackgroundUrl('backgrounds/saved-trips.png'),
     position: 'center center',
     overlay:
       'linear-gradient(180deg, rgba(237,232,224,0.58) 0%, rgba(225,218,208,0.67) 40%, rgba(203,194,184,0.77) 100%)',
