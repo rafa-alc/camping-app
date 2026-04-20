@@ -34,6 +34,12 @@ export const AppShell = ({
 }: AppShellProps) => {
   const background = appBackgrounds[backgroundId];
   const authDisplayName = authEmail?.split('@')[0] ?? null;
+  const headerActionGroupClass =
+    'flex w-fit flex-wrap items-center gap-1.5 rounded-full border border-white/28 bg-[linear-gradient(180deg,rgba(48,57,54,0.14)_0%,rgba(28,35,33,0.08)_100%)] px-1.5 py-1.5 shadow-[0_14px_28px_-24px_rgba(19,25,23,0.72)] backdrop-blur-md sm:flex-nowrap';
+  const headerActionButtonClass =
+    'rounded-full border px-3.5 py-1.5 text-sm font-semibold text-pine-800 transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out border-[rgba(219,207,188,0.94)] bg-[linear-gradient(180deg,rgba(250,245,238,0.96)_0%,rgba(244,236,226,0.96)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.58),0_10px_18px_-18px_rgba(83,64,46,0.55)] hover:-translate-y-px hover:border-[rgba(205,191,172,0.96)] hover:bg-[linear-gradient(180deg,rgba(252,248,242,1)_0%,rgba(247,239,229,1)_100%)] hover:text-pine-900';
+  const headerActionGhostClass =
+    'rounded-full border px-3.5 py-1.5 text-sm font-medium text-pine-700 transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out border-[rgba(230,221,207,0.72)] bg-[linear-gradient(180deg,rgba(248,242,234,0.74)_0%,rgba(241,233,223,0.76)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44),0_8px_16px_-18px_rgba(83,64,46,0.42)] hover:-translate-y-px hover:border-[rgba(217,206,190,0.92)] hover:bg-[linear-gradient(180deg,rgba(250,246,240,0.92)_0%,rgba(244,237,227,0.94)_100%)] hover:text-pine-800';
   const backgroundImageStyle = useMemo(
     () => ({
       backgroundImage: `url(${background.imageUrl})`,
@@ -94,16 +100,16 @@ export const AppShell = ({
 
           {(showAuthAction || (showHomeAction && onGoHome)) && (
             <div className="self-start sm:absolute sm:right-0 sm:top-0 sm:self-auto">
-              <div className="flex flex-wrap items-center gap-1.5 rounded-full border border-white/18 bg-[linear-gradient(180deg,rgba(37,45,42,0.18)_0%,rgba(24,31,29,0.1)_100%)] px-2 py-2 shadow-[0_12px_24px_-22px_rgba(19,25,23,0.72)] backdrop-blur-sm">
+              <div className={headerActionGroupClass}>
                 {showAuthAction && authStatus === 'authenticated' && authDisplayName && (
-                  <span className="inline-flex max-w-[8.5rem] items-center rounded-full border border-white/18 bg-white/84 px-2.5 py-1 text-xs font-medium text-pine-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]">
+                  <span className="inline-flex max-w-[7.75rem] items-center rounded-full border border-white/28 bg-white/90 px-2.5 py-1 text-xs font-medium text-pine-700 shadow-[0_8px_16px_-18px_rgba(53,41,29,0.45),inset_0_1px_0_rgba(255,255,255,0.42)]">
                     <span className="truncate">{authDisplayName}</span>
                   </span>
                 )}
 
                 {showAuthAction && authStatus === 'authenticated' && (
                   <button
-                    className="ui-button-ghost border border-white/18 bg-white/14 px-3 py-1.5 text-stone-50 hover:bg-white/24 hover:text-white"
+                    className={headerActionButtonClass}
                     disabled={isAuthBusy}
                     onClick={onSignOut}
                     type="button"
@@ -114,7 +120,7 @@ export const AppShell = ({
 
                 {showAuthAction && authStatus !== 'authenticated' && (
                   <button
-                    className="ui-button-ghost border border-white/18 bg-white/14 px-3 py-1.5 text-stone-50 hover:bg-white/24 hover:text-white"
+                    className={headerActionButtonClass}
                     disabled={isAuthBusy || authStatus === 'loading'}
                     onClick={onOpenAuth}
                     type="button"
@@ -129,7 +135,7 @@ export const AppShell = ({
 
                 {showHomeAction && onGoHome && (
                   <button
-                    className="ui-button-ghost border border-white/18 bg-white/14 px-3 py-1.5 text-stone-50 hover:bg-white/24 hover:text-white"
+                    className={headerActionGhostClass}
                     onClick={onGoHome}
                     type="button"
                   >
