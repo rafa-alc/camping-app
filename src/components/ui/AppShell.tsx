@@ -35,11 +35,11 @@ export const AppShell = ({
   const background = appBackgrounds[backgroundId];
   const authDisplayName = authEmail?.split('@')[0] ?? null;
   const headerActionGroupClass =
-    'flex w-fit flex-wrap items-center gap-1.5 rounded-full border border-white/28 bg-[linear-gradient(180deg,rgba(48,57,54,0.14)_0%,rgba(28,35,33,0.08)_100%)] px-1.5 py-1.5 shadow-[0_14px_28px_-24px_rgba(19,25,23,0.72)] backdrop-blur-md sm:flex-nowrap';
+    'grid w-full max-w-[23rem] grid-cols-2 items-center gap-1.5 rounded-[2rem] border border-white/28 bg-[linear-gradient(180deg,rgba(48,57,54,0.14)_0%,rgba(28,35,33,0.08)_100%)] px-1.5 py-1.5 shadow-[0_14px_28px_-24px_rgba(19,25,23,0.72)] backdrop-blur-md sm:flex sm:w-fit sm:max-w-none sm:flex-nowrap sm:rounded-full';
   const headerActionButtonClass =
-    'rounded-full border px-3.5 py-1.5 text-sm font-semibold text-pine-800 transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out border-[rgba(219,207,188,0.94)] bg-[linear-gradient(180deg,rgba(250,245,238,0.96)_0%,rgba(244,236,226,0.96)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.58),0_10px_18px_-18px_rgba(83,64,46,0.55)] hover:-translate-y-px hover:border-[rgba(205,191,172,0.96)] hover:bg-[linear-gradient(180deg,rgba(252,248,242,1)_0%,rgba(247,239,229,1)_100%)] hover:text-pine-900';
+    'inline-flex w-full items-center justify-center rounded-full border px-3 py-1.5 text-center text-sm font-semibold text-pine-800 transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out border-[rgba(219,207,188,0.94)] bg-[linear-gradient(180deg,rgba(250,245,238,0.96)_0%,rgba(244,236,226,0.96)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.58),0_10px_18px_-18px_rgba(83,64,46,0.55)] hover:-translate-y-px hover:border-[rgba(205,191,172,0.96)] hover:bg-[linear-gradient(180deg,rgba(252,248,242,1)_0%,rgba(247,239,229,1)_100%)] hover:text-pine-900 sm:w-auto sm:px-3.5';
   const headerActionGhostClass =
-    'rounded-full border px-3.5 py-1.5 text-sm font-medium text-pine-700 transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out border-[rgba(230,221,207,0.72)] bg-[linear-gradient(180deg,rgba(248,242,234,0.74)_0%,rgba(241,233,223,0.76)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44),0_8px_16px_-18px_rgba(83,64,46,0.42)] hover:-translate-y-px hover:border-[rgba(217,206,190,0.92)] hover:bg-[linear-gradient(180deg,rgba(250,246,240,0.92)_0%,rgba(244,237,227,0.94)_100%)] hover:text-pine-800';
+    'col-span-2 inline-flex w-full items-center justify-center rounded-full border px-3 py-1.5 text-center text-sm font-medium text-pine-700 transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out border-[rgba(230,221,207,0.72)] bg-[linear-gradient(180deg,rgba(248,242,234,0.78)_0%,rgba(241,233,223,0.8)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44),0_8px_16px_-18px_rgba(83,64,46,0.42)] hover:-translate-y-px hover:border-[rgba(217,206,190,0.92)] hover:bg-[linear-gradient(180deg,rgba(250,246,240,0.92)_0%,rgba(244,237,227,0.94)_100%)] hover:text-pine-800 sm:col-span-1 sm:w-auto sm:px-3.5';
   const backgroundImageStyle = useMemo(
     () => ({
       backgroundImage: `url(${background.imageUrl})`,
@@ -99,10 +99,10 @@ export const AppShell = ({
           </div>
 
           {(showAuthAction || (showHomeAction && onGoHome)) && (
-            <div className="self-start sm:absolute sm:right-0 sm:top-0 sm:self-auto">
+            <div className="w-full self-start sm:absolute sm:right-0 sm:top-0 sm:w-auto sm:self-auto">
               <div className={headerActionGroupClass}>
                 {showAuthAction && authStatus === 'authenticated' && authDisplayName && (
-                  <span className="inline-flex max-w-[7.75rem] items-center rounded-full border border-white/28 bg-white/90 px-2.5 py-1 text-xs font-medium text-pine-700 shadow-[0_8px_16px_-18px_rgba(53,41,29,0.45),inset_0_1px_0_rgba(255,255,255,0.42)]">
+                  <span className="inline-flex w-full min-w-0 items-center justify-center rounded-full border border-white/28 bg-white/90 px-2.5 py-1 text-xs font-medium text-pine-700 shadow-[0_8px_16px_-18px_rgba(53,41,29,0.45),inset_0_1px_0_rgba(255,255,255,0.42)] sm:max-w-[7.75rem]">
                     <span className="truncate">{authDisplayName}</span>
                   </span>
                 )}
